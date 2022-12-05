@@ -1,7 +1,7 @@
 variable "instances" {
   type = list(object({
     name = string
-    type = number    
+    type = string    
   }))
   default = [
     {
