@@ -1,13 +1,26 @@
-data "aws_caller_identity" "current" {}
+data "aws_ami" "ubuntu" {
+  most_recent = true
 
-output "account_id" {
-  value = data.aws_caller_identity.current.account_id
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
 }
 
-output "caller_arn" {
-  value = data.aws_caller_identity.current.arn
-}
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  for_each      = variable.instances
 
-output "caller_user" {
-  value = data.aws_caller_identity.current.user_id
+  instance_type = each.type
+
+  tags = {
+    Name = "HelloWorld"
+  }
 }
