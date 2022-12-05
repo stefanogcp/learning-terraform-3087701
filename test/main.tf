@@ -16,7 +16,7 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
-  for_each      = variable.instances
+  for_each      = var.instances
 
   instance_type = each.type
 
